@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Astronomy Picture of the Day</title>
+  <link rel="stylesheet" href="styles.css">
+  <meta property="og:title" content="Astronomy Picture of the Day">
+  <meta property="og:description" content="Explore the universe with a new astronomy picture every day.">
+  <meta property="og:image" content="https://i.pinimg.com/564x/01/74/c0/0174c026d67ffe8f7854f3a09f01ef23.jpg">
+  
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Astronomy Picture of the Day">
+  <meta property="og:locale" content="en_US">
+  <style>
+    body {
+      font-family: sans-serif;
+      background: linear-gradient(to bottom, #06090f 0%, #04070c 100%);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 800px;
+      text-align: center;
+      padding: 20px;
+    }
+
+    #apod-img {
+      width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+      display: none; /* Hide image initially */
+    }
+
+    #loading {
+      font-size: 24px;
+      margin-top: 20px;
+      animation: pulse 1.5s infinite alternate; /* Add animation */
+    }
+
+    @keyframes pulse {
+      0% {
+        opacity: 0.5;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    #apod-desc {
+      font-size: 18px;
+      line-height: 1.6;
+      margin-top: 20px;
+      text-align: left; /* Align text to the left */
+    }
+
+    #apod-desc a {
+      color: #fff;
+      text-decoration: underline;
+    }
+
+    footer {
+      margin-top: 50px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Astronomy Picture of the Day</h1>
+    <div id="loading">Loading...</div> <!-- Loading animation -->
+    <img id="apod-img" src="" alt="Astronomy Picture of the Day">
+    <p id="apod-desc"></p>
+    <footer>©Tanzim Khan Rafi</footer>
+  </div>
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      fetchAPOD();
+    });
+
+    function fetchAPOD() {
+      fetch('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY')
+        .then(response => response.json())
+        .then(data => {
+          // Display image and hide loading animation once image is loaded
+          const apodImg = document.getElementById('apod-img');
+          apodImg.src = data.url;
+          apodImg.onload = function() {
+            document.getElementById('loading').style.display = 'none';
+            apodImg.style.display = 'block';
+          };
+
+          document.getElementById('apod-desc').innerHTML = data.explanation;
+        })
+        .catch(error => console.error('Error fetching APOD:', error));
+    }
+  </script>
+</body>
+</html>
